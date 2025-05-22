@@ -191,10 +191,10 @@ html, body {
   </style>
 </head>
 <body>
-<audio id="bg-music" src="music.mp3" autoplay loop></audio>
+<audio id="bg-music" src="music.mp3"></audio>
 
 <button class="music-button" onclick="toggleMusic()">
-  <img id="music-icon" src="pause.png" alt="Музыка">
+  <img id="music-icon" src="play.png" alt="Музыка">
 </button>
 
 <div class="popup" id="popupMessage">Күте тұрыңыз...</div>
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const music = document.getElementById("bg-music");
   const icon = document.getElementById("music-icon");
   const popup = document.getElementById("popupMessage");
-  let isPlaying = true;
+  let isPlaying = false;
 
   function toggleMusic() {
     if (isPlaying) {
