@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <title>Данияр & Ляззат - Құдалық</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Comfortaa', cursive;
+      background-color: #fdf4e3;
+      color: #5a3b1e;
+      overflow-x: hidden;
+    }
+    .fullscreen-image {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .fullscreen-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+
+   .leaf {
+  position: fixed;
+  top: -60px;
+  width: 40px;
+  height: 40px;
+  background: url('leaf.png') no-repeat center;
+  background-size: contain;
+  pointer-events: none;
+  animation: fall linear infinite;
+  z-index: 10;
+}
+@keyframes fall {
+  0% {
+    transform: translateY(-60px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+html, body {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 30px 20px;
+      text-align: center;
+      position: relative;
+      opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 2s ease-out, transform 2s ease-out;
+    }
+    .container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      color: #a3672b;
+      margin-bottom: 10px;
+    }
+    p, .custom-text {
+      font-size: 1.2em;
+      color: #6d4a2d;
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+    .form-section {
+      background: #fffaf3;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      margin-top: 30px;
+    }
+    input, select {
+      padding: 14px;
+      margin: 10px auto;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 10px;
+      border: 1px solid #d9cbb1;
+      font-size: 1em;
+      display: block;
+      background: #fffef9;
+    }
+    button {
+      padding: 14px 28px;
+      background-color: #a3672b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #8b5521;
+    }
+    .music-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 999;
+    }
+    .music-button img {
+      width: 40px;
+      height: 40px;
+    }
+    .timer-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .timer-title {
+      font-size: 1.3em;
+      color: #a3672b;
+      margin-bottom: 10px;
+    }
+    .timer-box {
+      display: inline-flex;
+      gap: 10px;
+      justify-content: center;
+      font-weight: bold;
+      flex-wrap: wrap;
+    }
+    .time-block {
+      background-color: #fff3e6;
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      font-size: 1.2em;
+      color: #a33f00;
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #a3672b;
+      display: none;
+      z-index: 9999;
+    }
+    a.map-link img {
+      width: 100px;
+      border-radius: 10px;
+    }
+    section {
+    scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+
+}
+
+  </style>
+</head>
+<body>
+<audio id="bg-music" src="music.mp3" autoplay loop></audio>
+
+<button class="music-button" onclick="toggleMusic()">
+  <img id="music-icon" src="pause.png" alt="Музыка">
+</button>
+
+<div class="popup" id="popupMessage">Күте тұрыңыз...</div>
+
+<section>
+  <div class="fullscreen-image">
+    <img src="IMG_1664.PNG" alt="Құдалық — Мың жылдық" style="object-fit: contain;">
+  </div>
+</section>
+<script>
+   for (let i = 0; i < 25; i++) {
+    const leaf = document.createElement('div');
+    leaf.className = 'leaf';
+    leaf.style.left = Math.random() * 100 + 'vw';
+    leaf.style.animationDelay = Math.random() * 10 + 's';
+    leaf.style.animationDuration = 10 + Math.random() * 10 + 's';
+    document.body.appendChild(leaf);
+  }
+</script>
+<script>
+  // Scroll арқылы section анимациясы
+document.addEventListener("DOMContentLoaded", function () {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = entry.target.querySelector('.container');
+          if (container) {
+            container.classList.add('visible');
+          }
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.3
+    });
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+  });
+</script>
+
+
+<section>
+  <div class="container">
+    <img src="Данияр & Ляззат.png" alt="Данияр & Ляззат" style="max-width: 100%; border-radius: 20px;">
+  </div>
+</section>
+<section>
+  <div class="container">
+    <img src="кур.png" alt="Құрметті ағайын-туыс" style="max-width: 100%; border-radius: 20px;">
+  </div>
+</section>
+<section>
+  <div class="container">
+    <img src="сиз.png" alt="Сіздерді құдалыққа шақырамыз" style="max-width: 100%; border-radius: 20px;">
+  </div>
+</section>   
+<section>
+  <div class="container">
+    <img src="той.png" alt="Той салтанаты 2025" style="max-width: 100%; border-radius: 20px;">
+  </div>
+</section>  
+ 
+ <section style="position: relative;">
+  <div class="container" style="position: relative;">
+    <img src="мекен.png" alt="Мекенжайы: Талдықорған қаласы, Grand Hall мейрамханасы" style="max-width: 100%; border-radius: 20px;">
+
+    <a class="map-link" href="https://2gis.kz/almaty/firm/70000001083471157?m=78.422149%2C45.016277%2F16" target="_blank" 
+       style="position: absolute; bottom: 200px; left: 50%; transform: translateX(-50%);">
+      <img src="123.png" alt="Карта" style="width: 150px; border-radius: 10px;">
+    </a>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <img src="ие.png" alt="Той иелері: Ормановтар әулеті" style="max-width: 100%; border-radius: 20px;">
+  </div>
+</section>
+
+ <section style="position: relative; height: 100vh; background: url('IMG_1662.JPG') no-repeat center center; background-size: cover; display: flex; justify-content: center; align-items: center;">
+  <div style="background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; width: 90%;">
+    <h2 style="text-align: center; color: #5a3b1e;">Қатысатыңыз туралы жазыңыз</h2>
+    <form id="guestForm">
+      <input type="text" name="name" id="name" placeholder="Толық аты-жөніңіз" required style="padding: 14px; margin: 10px 0; width: 100%; border-radius: 10px; border: 1px solid #ccc;">
+      <select name="status" id="status" required style="padding: 14px; margin: 10px 0; width: 100%; border-radius: 10px; border: 1px solid #ccc;">
+        <option value="" disabled selected>Таңдаңыз:</option>
+        <option>Өзім барамын</option>
+        <option>Жұбайыммен барамын</option>
+        <option>Келмеймін</option>
+      </select>
+      <button type="submit" style="padding: 14px; background-color: #a3672b; color: white; border: none; border-radius: 10px; width: 100%; font-size: 1em;">Жіберу ✅</button>
+    </form>
+    <p id="responseMessage" style="color: green; font-weight: bold; display: none; text-align: center; margin-top: 10px;">✅ Жауап сәтті жіберілді!</p>
+  </div>
+</section>
+
+
+  <section style="position: relative; height: 100vh; background: url('IMG_1835.JPG') no-repeat center center; background-size: contain; background-repeat: no-repeat; display: flex; justify-content: center; align-items: center;">
+  <div style="background: rgba(255,255,255,0.9); padding: 20px 30px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); text-align: center;">
+    <div class="timer-title" style="font-size: 1.5em; margin-bottom: 15px; color: #5a3b1e;">Қалған уақыт:</div>
+    <div class="timer-box" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <div class="time-block" id="days" style="padding: 12px 18px; background-color: #fff3e6; border-radius: 10px; font-size: 1.2em; color: #a33f00;">00 күн</div>
+      <div class="time-block" id="hours" style="padding: 12px 18px; background-color: #fff3e6; border-radius: 10px; font-size: 1.2em; color: #a33f00;">00 сағат</div>
+      <div class="time-block" id="minutes" style="padding: 12px 18px; background-color: #fff3e6; border-radius: 10px; font-size: 1.2em; color: #a33f00;">00 минут</div>
+      <div class="time-block" id="seconds" style="padding: 12px 18px; background-color: #fff3e6; border-radius: 10px; font-size: 1.2em; color: #a33f00;">00 секунд</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const music = document.getElementById("bg-music");
+  const icon = document.getElementById("music-icon");
+  const popup = document.getElementById("popupMessage");
+  let isPlaying = true;
+
+  function toggleMusic() {
+    if (isPlaying) {
+      music.pause();
+      icon.src = "play.png";
+    } else {
+      music.play();
+      icon.src = "pause.png";
+    }
+    isPlaying = !isPlaying;
+  }
+
+  document.getElementById("guestForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const status = document.getElementById("status").value;
+    popup.innerText = "Күте тұрыңыз...";
+    popup.style.display = "block";
+
+    fetch("https://script.google.com/macros/s/AKfycbxjATDlIHGd_ZAcOPENNcpSvuwKe9jaea8nm_7d7NbEiuSlCnRL7m4eIqnypVir36EA/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `name=${encodeURIComponent(name)}&status=${encodeURIComponent(status)}`
+    }).then(() => {
+      popup.innerText = "✅ Жауап сәтті жіберілді!";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 3000);
+      document.getElementById("guestForm").reset();
+    }).catch((error) => {
+      alert("Қате орын алды.");
+      console.error("Error:", error);
+    });
+  });
+
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
+  const targetDate = new Date("2025-07-13T17:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+    if (diff < 0) {
+      daysEl.innerText = "0 күн";
+      hoursEl.innerText = "0 сағат";
+      minutesEl.innerText = "0 минут";
+      secondsEl.innerText = "0 секунд";
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    daysEl.innerText = `${days} күн`;
+    hoursEl.innerText = `${hours} сағат`;
+    minutesEl.innerText = `${minutes} минут`;
+    secondsEl.innerText = `${seconds} секунд`;
+  }, 1000);
+</script>
+</body>
+</html>
